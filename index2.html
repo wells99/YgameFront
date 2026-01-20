@@ -89,7 +89,7 @@
             const roomCode = document.getElementById('roomInput').value;
             if (!roomCode) return alert("Digite o número da sala!");
 
-            socket = new WebSocket('ws://localhost:8080');
+            socket = new WebSocket('wss://ygame.onrender.com');
 
             socket.onopen = () => {
                 socket.send(JSON.stringify({ type: 'JOIN_ROOM', room: roomCode }));
