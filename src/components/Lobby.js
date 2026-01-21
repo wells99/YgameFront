@@ -15,10 +15,20 @@ export default function Lobby({ room, setRoom, onJoin }) {
         </div>
         <button 
           onClick={onJoin}
-          className="w-full bg-yellow-600 hover:bg-yellow-500 font-bold py-3 rounded-lg transition-all transform active:scale-95"
+          className="w-full bg-yellow-600 hover:bg-yellow-500 font-bold py-3 rounded-lg transition-all transform active:scale-95 shadow-lg shadow-yellow-900/20"
         >
           ENTRAR NA PARTIDA
         </button>
+
+        {/* Descrição resumida das regras */}
+        <div className="pt-4 border-t border-slate-800 mt-2">
+          <div className="text-white text-[11px] text-left space-y-1 font-medium leading-tight opacity-60 uppercase tracking-wider">
+            <p>• Entre na mesma sala de um amigo</p>
+            <p>• Puxe cartas em cada turno</p>
+            <p>• Colete as 5 partes do Exodia</p>
+            <p>• A cabeça invoca a vitória imediata</p>
+          </div>
+        </div>
       </div>
     </div>
   );
