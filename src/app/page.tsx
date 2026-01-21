@@ -3,6 +3,7 @@ import { useState, useRef } from 'react';
 import Lobby from '@/components/Lobby';
 import GameBoard from '@/components/GameBoard';
 import Modal from '@/components/Modal';
+import ExodiaAnimation from '@/components/ExodiaAnimation';
 
 export default function Home() {
   const [room, setRoom] = useState('');
@@ -12,6 +13,7 @@ export default function Home() {
   const [hand, setHand] = useState<string[]>([]);
   const [status, setStatus] = useState('');
   const [modal, setModal] = useState({ show: false, title: '', sub: '' });
+  const [showAnimation, setShowAnimation] = useState(false);
 
   const socketRef = useRef<WebSocket | null>(null);
 
@@ -31,20 +33,18 @@ export default function Home() {
       if (data.type === 'DRAWN_CARD') setStatus(`Puxou: ${data.card}`);
 
       if (data.type === 'WINNER') {
-        // 1. Atualiza o status para disparar a animação no GameBoard
         setStatus("Puxou: CABEÇA DO EXODIA");
-        // 2. Adiciona a carta à mão
         setHand(prev => [...prev, "CABEÇA DO EXODIA"]);
 
-        // 3. Aguarda 1 segundo (tempo da animação + um fôlego) para mostrar o modal
         setTimeout(() => {
+          setShowAnimation(true);
           setModal({ show: true, title: "VITÓRIA!", sub: "O Exodia foi invocado por você!" });
         }, 1000);
       }
 
       if (data.type === 'GAME_OVER') {
-        // No caso de derrota, também é bom um pequeno delay para processar o que houve
         setTimeout(() => {
+          setShowAnimation(true);
           setModal({ show: true, title: "DERROTA!", sub: `Você foi obliterado!! ${data.winner} completou o Exodia.` });
         }, 500);
       }
@@ -62,6 +62,11 @@ export default function Home() {
 
   return (
     <main className="bg-slate-950 min-h-screen flex items-center justify-center text-white font-sans">
+      <ExodiaAnimation 
+        show={showAnimation} 
+        onClose={() => setShowAnimation(false)} 
+      />
+
       {!isJoined ? (
         <Lobby room={room} setRoom={setRoom} onJoin={handleJoin} />
       ) : (
