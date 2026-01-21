@@ -12,7 +12,7 @@ export default function Home() {
   const [hand, setHand] = useState<string[]>([]);
   const [status, setStatus] = useState('');
   const [modal, setModal] = useState({ show: false, title: '', sub: '' });
-  
+
   const socketRef = useRef<WebSocket | null>(null);
 
   const handleJoin = () => {
@@ -29,14 +29,24 @@ export default function Home() {
       }
       if (data.type === 'GAME_START' || data.type === 'NEXT_TURN') setCurrentTurn(data.turno);
       if (data.type === 'DRAWN_CARD') setStatus(`Puxou: ${data.card}`);
-      
+
       if (data.type === 'WINNER') {
+        // 1. Atualiza o status para disparar a animação no GameBoard
+        setStatus("Puxou: CABEÇA DO EXODIA");
+        // 2. Adiciona a carta à mão
         setHand(prev => [...prev, "CABEÇA DO EXODIA"]);
-        setModal({ show: true, title: "VITÓRIA!", sub: "O Exodia foi invocado por você!" });
+
+        // 3. Aguarda 1 segundo (tempo da animação + um fôlego) para mostrar o modal
+        setTimeout(() => {
+          setModal({ show: true, title: "VITÓRIA!", sub: "O Exodia foi invocado por você!" });
+        }, 1000);
       }
-      
+
       if (data.type === 'GAME_OVER') {
-        setModal({ show: true, title: "DERROTA!", sub: `Você foi obliterado!! ${data.winner} completou o Exodia.` });
+        // No caso de derrota, também é bom um pequeno delay para processar o que houve
+        setTimeout(() => {
+          setModal({ show: true, title: "DERROTA!", sub: `Você foi obliterado!! ${data.winner} completou o Exodia.` });
+        }, 500);
       }
 
       if (data.type === 'ERROR') {
@@ -65,10 +75,10 @@ export default function Home() {
         />
       )}
 
-      <Modal 
-        show={modal.show} 
-        title={modal.title} 
-        sub={modal.sub} 
+      <Modal
+        show={modal.show}
+        title={modal.title}
+        sub={modal.sub}
       />
     </main>
   );
