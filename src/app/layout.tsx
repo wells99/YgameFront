@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +32,11 @@ export default function RootLayout({
 
 
         {/* Cloudflare Web Analytics */}
-        <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "52ea0d2487744ec3954de724270b4e16"}'></script>
+        <Script
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          strategy="afterInteractive" 
+          data-cf-beacon='{"token": "52ea0d2487744ec3954de724270b4e16"}'
+        />
         {/* End Cloudflare Web Analytics */}
       </body>
     </html>
